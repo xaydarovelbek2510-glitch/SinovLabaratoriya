@@ -5,9 +5,69 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => applyI18n(btn.dataset.lang));
   });
 
+  // ---------- Enhanced Mobile Navigation ----------
   const navToggle = document.getElementById('navToggle');
   const mainNav = document.getElementById('mainNav');
-  navToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
+  
+  function toggleNav() {
+    mainNav.classList.toggle('open');
+    const isOpen = mainNav.classList.contains('open');
+    navToggle.innerHTML = isOpen ? '✕' : '☰';
+    navToggle.setAttribute('aria-expanded', isOpen);
+    
+    // Prevent body scroll when nav is open
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+  
+  function closeNav() {
+    mainNav.classList.remove('open');
+    navToggle.innerHTML = '☰';
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  
+  navToggle.addEventListener('click', toggleNav);
+  
+  // Close nav when clicking on links
+  mainNav.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', () => {
+      closeNav();
+      // Smooth scroll to target
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    });
+  });
+  
+  // Close nav when clicking outside
+  document.addEventListener('click', (e) => {
+    if (mainNav.classList.contains('open') && 
+        !navToggle.contains(e.target) && 
+        !mainNav.contains(e.target)) {
+      closeNav();
+    }
+  });
+  
+  // Close nav on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mainNav.classList.contains('open')) {
+      closeNav();
+    }
+  });
+  
+  // Handle resize - close nav if switching to desktop
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      if (window.innerWidth > 900 && mainNav.classList.contains('open')) {
+        closeNav();
+      }
+    }, 100);
+  });
 
   // ---------- Application form ----------
   const applyForm = document.getElementById('applyForm');
