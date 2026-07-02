@@ -1,7 +1,7 @@
 {
-  "name": "qurilish-sinov-lab-backend",
+  "name": "yol-sifat-magistral-backend",
   "version": "1.0.0",
-  "description": "Qurilish va yo'l materiallari sinov laboratoriyasi - veb-sayt backend",
+  "description": "Yo'l Sifat Magistral - ASFALTOBETON korxonasi yo'l sinov laboratoriyasi veb-sayt backend",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
