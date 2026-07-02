@@ -97,6 +97,8 @@ document.getElementById('addResultBtn').addEventListener('click', async () => {
 async function loadResults() {
   const res = await apiFetch('/api/admin/test-results');
   const rows = await res.json();
+  
+  // Desktop table
   const tbody = document.querySelector('#resultsTable tbody');
   tbody.innerHTML = rows.map(r => `
     <tr>
@@ -107,6 +109,39 @@ async function loadResults() {
       <td>${escapeHtml(r.status)}</td>
       <td><button class="logout" onclick="deleteResult(${r.id})">O'chirish</button></td>
     </tr>
+  `).join('');
+  
+  // Mobile cards
+  const cardsContainer = document.getElementById('resultsCards');
+  cardsContainer.innerHTML = rows.map(r => `
+    <div class="table-card">
+      <div class="card-row">
+        <span class="card-label">Sertifikat</span>
+        <span class="card-value mono">${escapeHtml(r.cert_number)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Mijoz</span>
+        <span class="card-value">${escapeHtml(r.client_name)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Namuna</span>
+        <span class="card-value">${escapeHtml(r.sample_type)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Sana</span>
+        <span class="card-value mono">${r.test_date ? r.test_date.substring(0,10) : ''}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Holat</span>
+        <span class="card-value">${escapeHtml(r.status)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Amallar</span>
+        <span class="card-value">
+          <button class="logout" onclick="deleteResult(${r.id})" style="padding: 6px 12px; font-size: 11px;">O'chirish</button>
+        </span>
+      </div>
+    </div>
   `).join('');
 }
 
@@ -120,6 +155,8 @@ async function deleteResult(id) {
 async function loadApplications() {
   const res = await apiFetch('/api/admin/applications');
   const rows = await res.json();
+  
+  // Desktop table
   const tbody = document.querySelector('#applicationsTable tbody');
   tbody.innerHTML = rows.map(a => `
     <tr>
@@ -136,6 +173,43 @@ async function loadApplications() {
         </select>
       </td>
     </tr>
+  `).join('');
+  
+  // Mobile cards
+  const cardsContainer = document.getElementById('applicationsCards');
+  cardsContainer.innerHTML = rows.map(a => `
+    <div class="table-card">
+      <div class="card-row">
+        <span class="card-label">Sana</span>
+        <span class="card-value mono">${new Date(a.created_at).toLocaleDateString('uz-UZ')}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Ism</span>
+        <span class="card-value">${escapeHtml(a.full_name)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Telefon</span>
+        <span class="card-value mono">${escapeHtml(a.phone)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Xizmat</span>
+        <span class="card-value">${escapeHtml(a.service_type)}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Izoh</span>
+        <span class="card-value">${escapeHtml(a.message || '—')}</span>
+      </div>
+      <div class="card-row">
+        <span class="card-label">Holat</span>
+        <span class="card-value">
+          <select class="small" onchange="updateAppStatus(${a.id}, this.value)" style="width: 100%; padding: 6px;">
+            <option value="yangi" ${a.status==='yangi'?'selected':''}>Yangi</option>
+            <option value="jarayonda" ${a.status==='jarayonda'?'selected':''}>Jarayonda</option>
+            <option value="yakunlandi" ${a.status==='yakunlandi'?'selected':''}>Yakunlandi</option>
+          </select>
+        </span>
+      </div>
+    </div>
   `).join('');
 }
 
