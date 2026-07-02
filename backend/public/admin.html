@@ -4,296 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin panel — Qurilish Sinov Lab</title>
-
-<!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%232f4858'/><text x='50' y='60' font-family='monospace' font-size='28' fill='%23c1440e' text-anchor='middle' font-weight='bold'>QSL</text></svg>">
-
-<!-- Security headers for admin -->
-<meta name="robots" content="noindex, nofollow">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-
-<!-- Performance optimizations -->
-<meta name="theme-color" content="#2f4858">
-<link rel="preload" href="css/style.css" as="style">
-
 <link rel="stylesheet" href="css/style.css">
 <style>
   body { background-image:none; }
   .admin-wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
   .admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
-  .card { background:#fff; border:1px solid var(--line); padding:24px; margin-bottom:28px; border-radius: 3px; }
-  
-  /* Login screen responsive */
-  .login-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-  }
-  
-  .login-card {
-    width: 100%;
-    max-width: 420px;
-  }
-  
-  /* Responsive table container */
-  .table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    border: 1px solid var(--line);
-    border-radius: 3px;
-  }
-  
-  table { width:100%; border-collapse: collapse; font-size:13.5px; min-width: 600px; }
+  .card { background:#fff; border:1px solid var(--line); padding:24px; margin-bottom:28px; }
+  table { width:100%; border-collapse: collapse; font-size:13.5px; }
   th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--line); vertical-align: top; }
-  th { font-family:'IBM Plex Mono',monospace; text-transform:uppercase; font-size:11.5px; color:var(--ink-soft); background: #f8f8f5; }
-  
-  /* Mobile table cards */
-  .table-cards {
-    display: none;
-  }
-  
-  .table-card {
-    background: #fff;
-    border: 1px solid var(--line);
-    padding: 16px;
-    margin-bottom: 12px;
-    border-radius: 3px;
-  }
-  
-  .table-card .card-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
-    gap: 12px;
-  }
-  
-  .table-card .card-row:last-child {
-    margin-bottom: 0;
-  }
-  
-  .table-card .card-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    min-width: 80px;
-    flex-shrink: 0;
-  }
-  
-  .table-card .card-value {
-    text-align: right;
-    word-break: break-word;
-    font-size: 13px;
-  }
-  .tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap: wrap; }
-  .tabs button { 
-    font-family:'Oswald',sans-serif; 
-    text-transform:uppercase; 
-    letter-spacing:.04em; 
-    font-size:13px; 
-    padding:9px 16px; 
-    border:1px solid var(--line); 
-    background:#fff; 
-    cursor:pointer; 
-    transition: all 0.2s ease;
-    border-radius: 3px;
-    min-height: var(--touch-target);
-  }
+  th { font-family:'IBM Plex Mono',monospace; text-transform:uppercase; font-size:11.5px; color:var(--ink-soft); }
+  .tabs { display:flex; gap:8px; margin-bottom:20px; }
+  .tabs button { font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.04em; font-size:13px; padding:9px 16px; border:1px solid var(--line); background:#fff; cursor:pointer; }
   .tabs button.active { background:var(--steel-dark); color:#fff; border-color:var(--steel-dark); }
-  .tabs button:hover { background: var(--steel); color: #fff; border-color: var(--steel); }
-  
   .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  
-  select.small, input.small { 
-    padding:6px 8px; 
-    font-size:13px; 
-    border:1px solid var(--line); 
-    border-radius: 3px;
-    transition: all 0.2s ease;
-  }
-  
-  select.small:focus, input.small:focus {
-    outline: 2px solid var(--steel);
-    outline-offset: 1px;
-    border-color: var(--steel);
-  }
-  
-  .logout { 
-    background:none; 
-    border:1px solid var(--line); 
-    padding:8px 14px; 
-    cursor:pointer; 
-    font-family:'IBM Plex Mono',monospace; 
-    font-size:12px; 
-    transition: all 0.2s ease;
-    border-radius: 3px;
-    min-height: var(--touch-target);
-  }
-  .logout:hover { 
-    background: var(--accent); 
-    color: #fff; 
-    border-color: var(--accent); 
-  }
-  
-  /* Form styling for admin */
-  .admin-form .field {
-    margin-bottom: 16px;
-  }
-  
-  .admin-form .field label {
-    display: block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-  
-  .admin-form .field input,
-  .admin-form .field select,
-  .admin-form .field textarea {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--line);
-    border-radius: 3px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    min-height: var(--touch-target);
-    box-sizing: border-box;
-  }
-  
-  .admin-form .field input:focus,
-  .admin-form .field select:focus,
-  .admin-form .field textarea:focus {
-    outline: 2px solid var(--steel);
-    outline-offset: 1px;
-    border-color: var(--steel);
-  }
-  
-  /* Responsive Admin Styles */
-  @media (max-width: 768px) {
-    .admin-wrap { 
-      padding: 24px 16px 60px; 
-      max-width: 100%;
-    }
-    
-    .admin-header { 
-      flex-direction: column; 
-      align-items: stretch; 
-      gap: 16px; 
-    }
-    
-    .admin-header h2 {
-      margin: 0;
-      text-align: center;
-    }
-    
-    .card { 
-      padding: 20px; 
-      margin-bottom: 20px;
-    }
-    
-    .grid2 { 
-      grid-template-columns: 1fr; 
-      gap: 12px; 
-    }
-    
-    .tabs {
-      justify-content: center;
-    }
-    
-    .tabs button {
-      flex: 1;
-      min-width: 120px;
-    }
-    
-    /* Hide desktop table, show mobile cards */
-    .table-container {
-      display: none;
-    }
-    
-    .table-cards {
-      display: block;
-    }
-    
-    .login-container {
-      padding: 16px;
-    }
-    
-    .admin-form .field input,
-    .admin-form .field select,
-    .admin-form .field textarea {
-      font-size: 16px; /* Prevent zoom on iOS */
-      padding: 10px 12px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .admin-wrap {
-      padding: 16px 12px 40px;
-    }
-    
-    .card {
-      padding: 16px;
-    }
-    
-    .tabs {
-      flex-direction: column;
-      gap: 8px;
-    }
-    
-    .tabs button {
-      font-size: 12px;
-      padding: 10px 12px;
-      min-width: auto;
-    }
-    
-    .logout {
-      width: 100%;
-      padding: 10px 14px;
-    }
-    
-    .admin-header h2 {
-      font-size: 18px;
-    }
-    
-    .login-container {
-      padding: 12px;
-    }
-    
-    .login-card h2 {
-      font-size: 20px;
-    }
-  }
-  
-  /* Landscape tablet optimizations */
-  @media (max-width: 1024px) and (min-width: 769px) {
-    .admin-wrap {
-      padding: 32px 20px 70px;
-    }
-    
-    .grid2 {
-      gap: 16px;
-    }
-  }
+  select.small, input.small { padding:6px 8px; font-size:13px; border:1px solid var(--line); }
+  .logout { background:none; border:1px solid var(--line); padding:8px 14px; cursor:pointer; font-family:'IBM Plex Mono',monospace; font-size:12px; }
 </style>
 </head>
 <body>
 
-<div id="loginScreen" class="login-container">
-  <div class="login-card">
-    <h2 style="text-align: center; margin-bottom: 24px;">QSL — Admin kirish</h2>
-    <div class="card">
-      <div class="field">
-        <label>Admin paroli</label>
-        <input type="password" id="loginPassword" style="width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 3px; font-size: 16px;">
-      </div>
-      <button class="btn" id="loginBtn" style="width: 100%;">Kirish</button>
-      <div id="loginMsg" class="form-msg"></div>
+<div id="loginScreen" class="admin-wrap" style="max-width:420px;">
+  <h2>QSL — Admin kirish</h2>
+  <div class="card">
+    <div class="field">
+      <label>Admin paroli</label>
+      <input type="password" id="loginPassword">
     </div>
+    <button class="btn" id="loginBtn">Kirish</button>
+    <div id="loginMsg" class="form-msg"></div>
   </div>
 </div>
 
@@ -311,72 +49,42 @@
   <div id="tabResults">
     <div class="card">
       <h3>Yangi natija qo'shish</h3>
-      <form class="admin-form">
-        <div class="grid2">
-          <div class="field">
-            <label>Sertifikat raqami</label>
-            <input type="text" id="r_cert" class="mono" placeholder="QSL-2026-00123">
-          </div>
-          <div class="field">
-            <label>Mijoz nomi</label>
-            <input type="text" id="r_client">
-          </div>
-          <div class="field">
-            <label>Namuna turi</label>
-            <input type="text" id="r_sample" placeholder="Asfaltobeton">
-          </div>
-          <div class="field">
-            <label>Standart</label>
-            <input type="text" id="r_standard" placeholder="GOST 9128-2013">
-          </div>
-          <div class="field">
-            <label>Sinov sanasi</label>
-            <input type="date" id="r_date">
-          </div>
-          <div class="field">
-            <label>Holat</label>
-            <select id="r_status">
-              <option value="kutilmoqda">Kutilmoqda</option>
-              <option value="otkazildi">O'tkazildi</option>
-              <option value="otkazilmadi">O'tkazilmadi</option>
-            </select>
-          </div>
-        </div>
+      <div class="grid2">
+        <div class="field"><label>Sertifikat raqami</label><input type="text" id="r_cert" class="mono" placeholder="QSL-2026-00123"></div>
+        <div class="field"><label>Mijoz nomi</label><input type="text" id="r_client"></div>
+        <div class="field"><label>Namuna turi</label><input type="text" id="r_sample" placeholder="Asfaltobeton"></div>
+        <div class="field"><label>Standart</label><input type="text" id="r_standard" placeholder="GOST 9128-2013"></div>
+        <div class="field"><label>Sinov sanasi</label><input type="date" id="r_date"></div>
         <div class="field">
-          <label>Xulosa</label>
-          <textarea id="r_summary" style="min-height: 80px; resize: vertical;"></textarea>
+          <label>Holat</label>
+          <select id="r_status">
+            <option value="kutilmoqda">Kutilmoqda</option>
+            <option value="otkazildi">O'tkazildi</option>
+            <option value="otkazilmadi">O'tkazilmadi</option>
+          </select>
         </div>
-        <button type="button" class="btn" id="addResultBtn">Saqlash</button>
-        <div id="resultMsg" class="form-msg"></div>
-      </form>
+      </div>
+      <div class="field"><label>Xulosa</label><textarea id="r_summary"></textarea></div>
+      <button class="btn" id="addResultBtn">Saqlash</button>
+      <div id="resultMsg" class="form-msg"></div>
     </div>
 
     <div class="card">
       <h3>Barcha natijalar</h3>
-      <!-- Desktop Table -->
-      <div class="table-container">
-        <table id="resultsTable">
-          <thead><tr><th>Sertifikat</th><th>Mijoz</th><th>Namuna</th><th>Sana</th><th>Holat</th><th></th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <!-- Mobile Cards -->
-      <div class="table-cards" id="resultsCards"></div>
+      <table id="resultsTable">
+        <thead><tr><th>Sertifikat</th><th>Mijoz</th><th>Namuna</th><th>Sana</th><th>Holat</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 
   <div id="tabApplications" class="hidden">
     <div class="card">
       <h3>Kelib tushgan arizalar</h3>
-      <!-- Desktop Table -->
-      <div class="table-container">
-        <table id="applicationsTable">
-          <thead><tr><th>Sana</th><th>Ism</th><th>Telefon</th><th>Xizmat</th><th>Izoh</th><th>Holat</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <!-- Mobile Cards -->
-      <div class="table-cards" id="applicationsCards"></div>
+      <table id="applicationsTable">
+        <thead><tr><th>Sana</th><th>Ism</th><th>Telefon</th><th>Xizmat</th><th>Izoh</th><th>Holat</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 </div>

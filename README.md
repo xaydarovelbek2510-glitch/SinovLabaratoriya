@@ -1,37 +1,21 @@
 # Qurilish Sinov Laboratoriyasi — veb-sayt
 
-Yo'l va qurilish materiallari sinov laboratoriyasi uchun **to'liq responsive** ikki tilli (O'zbek / Rus) tanishtiruv sayti. Barcha qurilmalarda mukammal ishlaydi: mobil telefon, planshet va kompyuter.
+Yo'l va qurilish materiallari sinov laboratoriyasi uchun ikki tilli (O'zbek / Rus) tanishtiruv sayti. Docker orqali ishga tushiriladi.
 
-## 📱 Responsive Xususiyatlari
-
-- **Mobil-first dizayn** - barcha qurilmalar uchun optimallashtirilgan
-- **Touch-friendly interfeys** - 44px minimum touch target'lar
-- **Adaptive navigation** - mobilda full-screen overlay menyu
-- **Responsive jadvallar** - mobilda card layout, desktopda table
-- **Fluid typography** - barcha ekranlar uchun moslashuvchi matn o'lchamlari
-- **Performance optimizatsiya** - mobil qurilmalar uchun maxsus optimizatsiya
-
-## 🎯 Tarkibi
+## Tarkibi
 
 - **Tanishtiruv sahifasi** — xizmatlar, akkreditatsiya ma'lumoti, aloqa
 - **Onlayn ariza formasi** — mijozlar sinovga ariza qoldirishi mumkin
 - **Sertifikat/natija tekshirish** — sertifikat raqami bo'yicha ochiq tekshirish
 - **Admin panel** (`/admin.html`) — sinov natijalarini kiritish va arizalarni ko'rish
 
-## 💻 Texnologiyalar
+## Texnologiyalar
 
 - Backend: Node.js + Express + PostgreSQL
-- Frontend: Responsive HTML/CSS/JS (build kerak emas)
+- Frontend: statik HTML/CSS/JS (build kerak emas)
 - Docker Compose: `db` (PostgreSQL), `backend` (API + sayt), `adminer` (ma'lumotlar bazasini ko'rish uchun ixtiyoriy)
 
-## 📐 Responsive Breakpoint'lar
-
-- **Mobile**: 320px - 480px (telefon)
-- **Tablet**: 481px - 768px (planshet)  
-- **Desktop**: 769px+ (kompyuter)
-- **Wide Screen**: 1200px+ (keng ekranlar)
-
-## 🚀 Ishga tushirish
+## Ishga tushirish
 
 1. `.env` faylini yarating:
 
@@ -53,51 +37,7 @@ docker compose up -d --build
 - Admin panel: **http://localhost:4000/admin.html** (`.env` dagi `ADMIN_PASSWORD` bilan kiring)
 - Adminer (DB ko'rish): **http://localhost:8081** (server: `db`, user/parol — `.env` dagi qiymatlar)
 
-## 📱 Responsive Test
-
-Sayt quyidagi qurilmalarda sinovdan o'tkazilgan:
-
-### Mobil Qurilmalar
-- ✅ iPhone SE (375x667px)
-- ✅ Galaxy S8 (360x740px)
-- ✅ Barcha Android va iOS qurilmalar
-
-### Planshet Qurilmalar  
-- ✅ iPad (768x1024px)
-- ✅ iPad Pro (1024x1366px)
-- ✅ Android planshlar
-
-### Kompyuter Ekranlari
-- ✅ 1366x768px (laptop)
-- ✅ 1920x1080px (desktop)
-- ✅ 2560x1440px+ (wide screen)
-
-Batafsil test hisoboti: `RESPONSIVE_TEST_REPORT.md`
-
-## ⚡ Performance Xususiyatlari
-
-- **Mobil optimizatsiya**: Soddalashtirilgan background pattern'lar
-- **Touch optimizatsiya**: 44px minimum touch target'lar
-- **Font optimizatsiya**: `font-display: swap` bilan
-- **Reduced motion support**: Harakat sezuvchanligi bo'lgan foydalanuvchilar uchun
-- **Connection-aware**: Sekin internetda optimallashtirilgan
-
-## ♿ Accessibility Features
-
-- **WCAG 2.1 AA** standartiga muvofiq
-- **Keyboard navigation** - klaviatura bilan to'liq boshqarish
-- **Focus management** - ko'rish qobiliyati cheklangan foydalanuvchilar uchun
-- **Color contrast** - yetarli rang kontrastlari
-- **Screen reader friendly** - ekran o'quvchi dasturlar uchun
-
-## 🎨 Dizayn Xususiyatlari
-
-- **Mobile-first approach** - mobil qurilmalar uchun birinchi navbatda dizayn
-- **Fluid grids** - moslashuvchi grid tizimi
-- **Flexible images** - responsive rasmlar (kelajakda)
-- **Touch-friendly UI** - barmoq uchi bilan qulay foydalanish
-
-## ⚠️ Muhim eslatmalar
+## Muhim eslatmalar
 
 - Saytdagi barcha matn, standart raqamlari (GOST, O'zDSt, ShNQ), manzil, telefon va akkreditatsiya sertifikat raqami — **namuna/placeholder** ma'lumotlar. Real ishga tushirishdan oldin ularni o'z laboratoriyangizning haqiqiy ma'lumotlari bilan almashtiring:
   - `backend/public/index.html` — matnlar (uz)
@@ -105,7 +45,7 @@ Batafsil test hisoboti: `RESPONSIVE_TEST_REPORT.md`
 - Admin autentifikatsiyasi sodda (bitta umumiy parol + JWT). Agar sayt haqiqiy internetga chiqariladigan bo'lsa, HTTPS (masalan, Nginx + Let's Encrypt orqali) va kuchliroq parol siyosati qo'shish tavsiya etiladi.
 - Ma'lumotlar bazasi konteyner o'chirilganda ham saqlanadi (`db_data` volume orqali).
 
-## 🛠 Foydali buyruqlar
+## Foydali buyruqlar
 
 ```bash
 # Loglarni ko'rish
@@ -119,7 +59,4 @@ docker compose down -v
 
 # Qayta build qilish (kod o'zgartirilgandan keyin)
 docker compose up -d --build
-
-# Responsive test (turli ekran o'lchamlarida)
-# Browser DevTools'da turli qurilma o'lchamlarini sinab ko'ring
 ```
