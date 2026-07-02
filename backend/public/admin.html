@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin panel — Qurilish Sinov Lab</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { background-image:none; }
+  .admin-wrap { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+  .admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
+  .card { background:#fff; border:1px solid var(--line); padding:24px; margin-bottom:28px; }
+  table { width:100%; border-collapse: collapse; font-size:13.5px; }
+  th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--line); vertical-align: top; }
+  th { font-family:'IBM Plex Mono',monospace; text-transform:uppercase; font-size:11.5px; color:var(--ink-soft); }
+  .tabs { display:flex; gap:8px; margin-bottom:20px; }
+  .tabs button { font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.04em; font-size:13px; padding:9px 16px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+  .tabs button.active { background:var(--steel-dark); color:#fff; border-color:var(--steel-dark); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  select.small, input.small { padding:6px 8px; font-size:13px; border:1px solid var(--line); }
+  .logout { background:none; border:1px solid var(--line); padding:8px 14px; cursor:pointer; font-family:'IBM Plex Mono',monospace; font-size:12px; }
+</style>
+</head>
+<body>
+
+<div id="loginScreen" class="admin-wrap" style="max-width:420px;">
+  <h2>QSL — Admin kirish</h2>
+  <div class="card">
+    <div class="field">
+      <label>Admin paroli</label>
+      <input type="password" id="loginPassword">
+    </div>
+    <button class="btn" id="loginBtn">Kirish</button>
+    <div id="loginMsg" class="form-msg"></div>
+  </div>
+</div>
+
+<div id="panelScreen" class="admin-wrap hidden">
+  <div class="admin-header">
+    <h2 style="margin:0;">QSL — Boshqaruv paneli</h2>
+    <button class="logout" id="logoutBtn">Chiqish</button>
+  </div>
+
+  <div class="tabs">
+    <button data-tab="results" class="active">Sinov natijalari</button>
+    <button data-tab="applications">Arizalar</button>
+  </div>
+
+  <div id="tabResults">
+    <div class="card">
+      <h3>Yangi natija qo'shish</h3>
+      <div class="grid2">
+        <div class="field"><label>Sertifikat raqami</label><input type="text" id="r_cert" class="mono" placeholder="QSL-2026-00123"></div>
+        <div class="field"><label>Mijoz nomi</label><input type="text" id="r_client"></div>
+        <div class="field"><label>Namuna turi</label><input type="text" id="r_sample" placeholder="Asfaltobeton"></div>
+        <div class="field"><label>Standart</label><input type="text" id="r_standard" placeholder="GOST 9128-2013"></div>
+        <div class="field"><label>Sinov sanasi</label><input type="date" id="r_date"></div>
+        <div class="field">
+          <label>Holat</label>
+          <select id="r_status">
+            <option value="kutilmoqda">Kutilmoqda</option>
+            <option value="otkazildi">O'tkazildi</option>
+            <option value="otkazilmadi">O'tkazilmadi</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Xulosa</label><textarea id="r_summary"></textarea></div>
+      <button class="btn" id="addResultBtn">Saqlash</button>
+      <div id="resultMsg" class="form-msg"></div>
+    </div>
+
+    <div class="card">
+      <h3>Barcha natijalar</h3>
+      <table id="resultsTable">
+        <thead><tr><th>Sertifikat</th><th>Mijoz</th><th>Namuna</th><th>Sana</th><th>Holat</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="tabApplications" class="hidden">
+    <div class="card">
+      <h3>Kelib tushgan arizalar</h3>
+      <table id="applicationsTable">
+        <thead><tr><th>Sana</th><th>Ism</th><th>Telefon</th><th>Xizmat</th><th>Izoh</th><th>Holat</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
